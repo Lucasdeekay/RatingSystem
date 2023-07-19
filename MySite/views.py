@@ -186,6 +186,14 @@ class DashboardView(View):
                 course = Course.objects.get(code__icontains=course_code)
                 Rating.objects.create(course=course, student=student, mode_of_teaching=mode_of_teaching,
                                       communication=communication, relationship=relationship, comment=comment)
+                if not Ranking.objects.filter(course=course).exist():
+                    ranking = Ranking.objects.create(course=course)
+                else:
+                    ranking = Ranking.objects.get(course=course)
+
+                ranking.calculate_point()
+                ranking.save()
+
                 messages.success(request, "Rating successfully completed")
                 return HttpResponseRedirect(reverse('MySite:dashboard'))
             else:
