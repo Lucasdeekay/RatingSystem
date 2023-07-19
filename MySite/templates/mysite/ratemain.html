@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'mysite/ratemain.css' %}">
+  <title>Lecturer Rating System</title>
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <img src="{% static 'mysite/logo.png' %}" alt="Dominion University Ibadan Logo">
+    </div>
+    <h1>Dominion University Ibadan</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="{% url 'MySite:ranking' %}">Ranking</a></li>
+      <li><a href="{% url 'MySite:dashboard' %}">Dashboard</a></li>
+      <li><a href="{% url 'MySite:logout' %}">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="container">
+      <h2>Lecturer Rating System</h2>
+      <form method="post" action="" id="rating-form">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="course-code">Course Code:</label>
+          <input type="text" name="course_code" id="course-code" required>
+        </div>
+        <div class="rating-criteria">
+          <h3>Rating Criteria:</h3>
+          <div class="rating-item">
+            <span class="rating-scale">1</span>
+            <span>Poor</span>
+          </div>
+          <div class="rating-item">
+            <span class="rating-scale">2</span>
+            <span>Average</span>
+          </div>
+          <div class="rating-item">
+            <span class="rating-scale">3</span>
+            <span>Neutral</span>
+          </div>
+          <div class="rating-item">
+            <span class="rating-scale">4</span>
+            <span>Good</span>
+          </div>
+          <div class="rating-item">
+            <span class="rating-scale">5</span>
+            <span>Excellent</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="mode-of-teaching">Mode of Teaching:</label>
+          <select id="mode-of-teaching" name="mode_of_teaching" required>
+            <option value="">Select rating</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="communication">Communication:</label>
+          <select id="communication" name="communication" required>
+            <option value="">Select rating</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="relationship">Relationship with Students:</label>
+          <select id="relationship" name="relationship" required>
+            <option value="">Select rating</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="comment">Comment:</label>
+          <textarea id="comment" name="comment" rows="4" required></textarea>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+          <h3>Rating Submitted</h3>
+          <p>Your rating has been saved.</p>
+          <span id="popup-close" class="popup-close">&times;</span>
+        </div>
+    </div>
+      
+  </main>
+
+  <footer>
+    <p>&copy; 2023 Dominion University Ibadan. All rights reserved.</p>
+  </footer>
+
+  <script src="{% static 'mysite/ratemain.js' %}"></script>
+</body>
+
+</html>
