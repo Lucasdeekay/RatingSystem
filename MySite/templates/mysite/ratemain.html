@@ -26,6 +26,11 @@
 
   <main>
     <div class="container">
+      {% for msg in messages %}
+        <div class="container">
+            <h5>{{ msg }}</h5>
+        </div>
+        {% endfor %}
       <h2>Lecturer Rating System</h2>
       <form method="post" action="" id="rating-form">
         {% csrf_token %}

@@ -31,6 +31,12 @@
           <button id="register-btn">Register</button>
         </div>
 
+        {% for msg in messages %}
+        <div class="container">
+            <h5>{{ msg }}</h5>
+        </div>
+        {% endfor %}
+
         <form method="post" action="" id="login-form">
           {% csrf_token %}
           <h2>Login</h2>

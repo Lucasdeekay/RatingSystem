@@ -169,14 +169,21 @@ class DashboardView(View):
 
     @method_decorator(login_required)
     def get(self, request):
-        return render(request, self.template_name)
+        student = Student.objects.get(user=request.user)
+        if Rating.objects.filter(student=student).exists():
+            # Redirect back to dashboard if true
+            return render(request, self.template_name, {"has_rated": True})
+        # Otherwise
+        else:
+            # load the page with the form
+            return render(request, self.template_name)
 
     def post(self, request):
         student = Student.objects.get(user=request.user)
         # Check if form is submitting
         if request.method == "POST":
             # Collect inputs
-            course_code = request.POST.get("course_code").strip()
+            course_code = request.POST.get("course_code").strip().upper()
             mode_of_teaching = request.POST.get("mode_of_teaching")
             communication = request.POST.get("communication")
             relationship = request.POST.get("relationship")
@@ -184,18 +191,23 @@ class DashboardView(View):
 
             if Course.objects.filter(code__icontains=course_code).exists():
                 course = Course.objects.get(code__icontains=course_code)
-                Rating.objects.create(course=course, student=student, mode_of_teaching=mode_of_teaching,
-                                      communication=communication, relationship=relationship, comment=comment)
-                if not Ranking.objects.filter(course=course).exist():
-                    ranking = Ranking.objects.create(course=course)
+
+                if Rating.objects.filter(**{"course": course, "student": student}).exists():
+                    messages.success(request, f"You have already rated {course.code}")
+                    return HttpResponseRedirect(reverse('MySite:dashboard'))
                 else:
-                    ranking = Ranking.objects.get(course=course)
+                    Rating.objects.create(course=course, student=student, mode_of_teaching=mode_of_teaching,
+                                          communication=communication, relationship=relationship, comment=comment)
+                    if not Ranking.objects.filter(course=course).exists():
+                        ranking = Ranking.objects.create(course=course)
+                    else:
+                        ranking = Ranking.objects.get(course=course)
 
-                ranking.calculate_point()
-                ranking.save()
+                    ranking.calculate_point()
+                    ranking.save()
 
-                messages.success(request, "Rating successfully completed")
-                return HttpResponseRedirect(reverse('MySite:dashboard'))
+                    messages.success(request, "Rating successfully completed")
+                    return HttpResponseRedirect(reverse('MySite:dashboard'))
             else:
                 messages.success(request, "Course does not exist")
                 return HttpResponseRedirect(reverse('MySite:dashboard'))

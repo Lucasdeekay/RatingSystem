@@ -34,6 +34,11 @@
 
 <main>
     <div class="container">
+        {% for msg in messages %}
+        <div class="container">
+            <h5>{{ msg }}</h5>
+        </div>
+        {% endfor %}
         <h2>Cumulative Ratings</h2>
         <table class="table table-hover">
             <thead>
@@ -51,7 +56,7 @@
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ rank.course.code }}</td>
                 <td>{{ rank.course.title }}</td>
-                <td>@{{ rank.course.lecturer }}</td>
+                <td>{{ rank.course.lecturer }}</td>
                 <td>{{ rank.points }}</td>
             </tr>
             {% empty %}
